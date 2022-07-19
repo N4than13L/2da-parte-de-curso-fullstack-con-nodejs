@@ -66,7 +66,6 @@ var TopicController = {
         // Cargar la libreria de paginacion en la clase en el modelo.
         
         // Recoger la pagina actual
-
         if(req.params.page == null || req.params.page == 0 
             || req.params.page == "0" || req.params.page == undefined 
             || req.params.page == false){
@@ -100,6 +99,60 @@ var TopicController = {
                 totalpages: topics.totalDocs
             })
         })
+        
+    },
+
+    getMyTopicsByUser: function(req, res){
+        // Conseguir el id del usuario.
+        var userId = req.params.user
+
+        // Find con una condicion de usuario.
+        Topic.find({
+            user: userId
+        })
+
+        .sort([['date', 'descending']])
+        .exec((err, topics) =>{
+            if (err && !topics){
+                // response.
+                return res.status(500).send({
+                    status: "error",
+                    message: "error en la peticion o no hay temas para mostrar"
+                })
+            }
+
+            // Devolver respuesta.
+            return res.status(200).send({
+                status: "success",
+                topics    
+            })
+        })
+    },
+
+    getTopic: function(req,res){
+        // sacar el id del del topic de la url
+        var topicId = req.params.id
+
+        // Find por id del topic 
+        Topic.findById(topicId)
+        .populate('user')
+        .exec((err, topic) => {
+            
+            if (err && !topic){
+                // Devolver respuesta
+                return res.status(404).send({
+                    message: "no existe el tema"
+                })
+            }
+
+            // Devolver respuesta
+            return res.status(200).send({
+                status: "suceess",
+                topic
+            })
+
+        })
+
         
     }
 }
