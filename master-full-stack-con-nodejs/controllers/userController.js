@@ -199,7 +199,7 @@ var userController = {
         var userId = req.user.sub
 
         // Comprobar si el imail es unico.
-        if(req.user.email == params.email){
+        if(req.user.email != params.email){
             User.findOne({email: params.email.toLowerCase()}, (error, user)=>{
                 if(error){
                     return res.status(500).send({
@@ -212,10 +212,29 @@ var userController = {
                         status: "error",
                         message: "El email no puede ser modificado"
                     })
+                }else{
+                    // Buscar y actualizar documento
+                    User.findOneAndUpdate({_id: userId}, params, {new: true}, (err, userUpdate) => {
+                        if(err || !userUpdate){
+                            return res.status(404).send({
+                                status: 'error',
+                                message: 'error al actualizar usuario',                
+                            })
+                        }
+                        
+                        // devolver una respuesta
+                        return res.status(200).send({
+                            status: 'success',
+                            user: userUpdate
+                        })
+                    })
                 }
+
+
             })
 
         }else{
+            // Buscar y actualizar documento
             User.findOneAndUpdate({_id: userId}, params, {new: true}, (err, userUpdate) => {
                 if(err || !userUpdate){
                     return res.status(404).send({
@@ -347,7 +366,7 @@ var userController = {
                 user
             })
         })
-    }
+    },
 
 }
 

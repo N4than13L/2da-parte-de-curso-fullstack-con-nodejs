@@ -152,6 +152,81 @@ var TopicController = {
             })
 
         })
+    },
+
+    update: function (req, res) {
+        // recoger el id del topic (por url)
+        
+        var topic_id = req.params.id
+
+        // recoger los datos que llegan desde post
+
+        var params = req.body
+
+        // Validar datos.
+        try {
+            var validate_title = !validator.isEmpty(params.title)
+            var validate_content = !validator.isEmpty(params.content)
+            var validate_lang = !validator.isEmpty(params.lang)
+
+        } catch (err) {
+            return res.status(200).send({
+                message: "Faltan datos por enviar."
+            })
+        }
+
+        if(validate_title && validate_content && validate_lang){
+            // Montar un json con los datos modificables\
+            var update = {
+                title: params.title,
+                content: params.content,
+                code: params.code,
+                lang: params.lang
+            }
+
+            // Find and update del topic por id e id de usuario.
+            Topic.findOneAndUpdate({_id: topic_id, user: req.user.sub}, update, {new: true}, (err,topicUpdated)=>{
+                if(err || !topicUpdated){
+                    return res.status(500).send({
+                        message: "error, no se ha actualizado"
+                    })    
+                }
+                
+                // Devolver una respuesta
+                return res.status(200).send({
+                    status: "success",
+                    topic: topicUpdated
+                })
+            } )
+
+            
+        }else{
+            // Devolver una respuesta
+            return res.status(404).send({
+                message: "la validacion no es correcta"
+            })
+        }   
+    },
+    delete: function(req, res){
+        // Sacar el id del topic de la url
+        var topic_id = req.params.id
+
+        // Find and delete por topicId y por el userId
+        Topic.findByIdAndDelete({_id: topic_id, user: req.user.sub}, (err, topicRemoved)=>{
+            
+            if(err || !topicRemoved){
+                return res.status(500).send({
+                    status: "error",
+                    message: "error, al eliminar ya que no existe"
+                })    
+            }
+
+            // Devolver respuesta.
+            return res.status(200).send({
+                status: "success",
+                topic: topicRemoved
+            })
+        })
 
         
     }
