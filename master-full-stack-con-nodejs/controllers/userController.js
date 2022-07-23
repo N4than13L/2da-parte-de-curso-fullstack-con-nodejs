@@ -372,5 +372,3 @@ var userController = {
 
 // Exportar el controlador
 module.exports = userController
-
-

@@ -226,9 +226,42 @@ var TopicController = {
                 status: "success",
                 topic: topicRemoved
             })
-        })
-
-        
+        }) 
+    },
+    search: function (req, res) {
+        //sacar string a buscar de la url
+        var SearchString = req.params.search;
+ 
+        //find con or
+        Topic.find({
+            "$or": [//si se cumple albguna de estas condiciones
+                { "title": { "$regex": SearchString, "$options": "i" } },//SeachString contenido en title
+                { "content": { "$regex": SearchString, "$options": "i" } },//SeachString contenido en el content
+                { "lang": { "$regex": SearchString, "$options": "i" } },//SeachString contenido en el lang
+                { "code": { "$regex": SearchString, "$options": "i" } },//SeachString contenido en el code
+                { "comments.content": { "$regex": SearchString, "$options": "i" } },
+            ]
+        }).exec((err, topics) => {
+ 
+            if (err) {
+                return res.status(500).send({
+                    status: "error",
+                    message: "Error en la peticion",
+                    err
+                });
+            }
+            if (!topics) {
+                return res.status(404).send({
+                    status: 'error',
+                    message: "No hay temas disponibles"
+                })
+            }
+            //devolver resultado
+            return res.status(200).send({
+                status: 'success',
+                topics
+            });
+        });
     }
 }
 

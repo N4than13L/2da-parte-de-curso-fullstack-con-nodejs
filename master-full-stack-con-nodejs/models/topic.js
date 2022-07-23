@@ -11,7 +11,7 @@ var CommentSchema = Schema({
     user: { type: Schema.ObjectId, ref : 'User'}
 })
 
-var Comments = mongoose.model("Comment", CommentSchema)
+// var Comments = mongoose.model("Comment", CommentSchema)
 
 
 // Modelo de Topic.
