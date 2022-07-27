@@ -155,57 +155,65 @@ var TopicController = {
     },
 
     update: function (req, res) {
-        // recoger el id del topic (por url)
-        
-        var topic_id = req.params.id
-
-        // recoger los datos que llegan desde post
-
-        var params = req.body
-
-        // Validar datos.
+        // Recoger el id del topic de la URL
+        var topicId = req.params.id;
+ 
+        // Recoger los datos que llegan desde POST
+        var params = req.body;
+ 
+        // Validar datos
         try {
-            var validate_title = !validator.isEmpty(params.title)
-            var validate_content = !validator.isEmpty(params.content)
-            var validate_lang = !validator.isEmpty(params.lang)
-
-        } catch (err) {
+            var validate_title = !validator.isEmpty(params.title);
+            var validate_content = !validator.isEmpty(params.content);
+            var validate_lang = !validator.isEmpty(params.lang);
+        } catch (e) {
             return res.status(200).send({
-                message: "Faltan datos por enviar."
-            })
+                message: 'Faltan datos por enviar',
+            });
         }
-
-        if(validate_title && validate_content && validate_lang){
-            // Montar un json con los datos modificables\
+        if (validate_title && validate_lang && validate_content) {
+            // Montar un JSON con los datos modificables
             var update = {
                 title: params.title,
                 content: params.content,
                 code: params.code,
                 lang: params.lang
-            }
-
-            // Find and update del topic por id e id de usuario.
-            Topic.findOneAndUpdate({_id: topic_id, user: req.user.sub}, update, {new: true}, (err,topicUpdated)=>{
-                if(err || !topicUpdated){
+            };
+ 
+ 
+            // Find and update del topic por id y por id de usuario
+            Topic.findOneAndUpdate({ _id: topicId, user: req.user.sub }, update, { new: true }, (err, topicUpdated) => {
+ 
+ 
+                if (err) {
                     return res.status(500).send({
-                        message: "error, no se ha actualizado"
-                    })    
+                        status: 'error',
+                        message: 'Error en la peticion'
+                    });
                 }
-                
-                // Devolver una respuesta
+ 
+                if (!topicUpdated) {
+                    return res.status(404).send({
+                        status: 'error',
+                        message: 'No se ha actualizado el tema'
+                    });
+                }
+ 
+                // Devolver respuesta
                 return res.status(200).send({
-                    status: "success",
+                    status: 'success',
                     topic: topicUpdated
-                })
-            } )
-
-            
-        }else{
-            // Devolver una respuesta
-            return res.status(404).send({
-                message: "la validacion no es correcta"
-            })
-        }   
+                });
+            });
+ 
+ 
+        } else {
+ 
+            // Devolver respuesta
+            return res.status(200).send({
+                message: 'La validacion de datos no es correcta'
+            });
+        }
     },
     delete: function(req, res){
         // Sacar el id del topic de la url
