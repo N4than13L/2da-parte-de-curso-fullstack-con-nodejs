@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from 'src/app/models/user';
 import { UserService } from 'src/app/services/user.service';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -16,7 +17,10 @@ export class LoginComponent implements OnInit {
   public identity: any
   public token: any
 
-  constructor(private _userService: UserService) {
+  constructor(
+    private route: ActivatedRoute,
+    private _router: Router,
+    private _userService: UserService) {
     this.pageTitle = "Registrate aquí"
     this.user = new User("", "", "", "", "", "", "ROLE USER")
    }
@@ -33,15 +37,23 @@ export class LoginComponent implements OnInit {
           
           // Guardamos el usuario en una propiedad.
           this.identity = response.user
+          localStorage.setItem('identity', JSON.stringify(this.identity))
 
           // Consgeuir el token de usuaio 
           this._userService.signup(this.user, true).subscribe(
             response => {
               if (response.token){  
-                console.log(response)
+                // Guardar el token del usuario en una propiedad
+                this.token = response.token
+                localStorage.setItem('token', this.token)
+
+                this.status = "success"
+                this._router.navigate(['/inicio'])
+                
               }else{  
                 this.status = "error"
               }
+              form.reset()
             },
             error => {
               this.status = "error"

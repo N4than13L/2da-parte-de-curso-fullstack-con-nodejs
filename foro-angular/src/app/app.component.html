@@ -1,5 +1,4 @@
-
-  <nav class="navbar navbar-expand-lg" style="background-color: rgb(123, 165, 228);">
+  <nav class="navbar navbar-expand-lg" style="background-color: rgba(119, 160, 221, 0.678);">
     <div class="container-fluid">
       <a class="navbar-brand"[routerLink]="['/inicio']">Navbar</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -11,11 +10,15 @@
             <a class="nav-link active" aria-current="page" [routerLink]="['/inicio']">Inicio</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Ver temas</a>
+            <a class="nav-link" href="#">Temas</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Crear temas</a>
+            <a class="nav-link" href="#" *ngIf="identity">Crear temas</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">companeros</a>
+          </li>
+          
   
           <li class="nav-item">
             <form class="d-flex" role="search">
@@ -28,21 +31,21 @@
   
         <ul class="navbar-nav navbar-right">
           <li class="nav-item">
-            <a class="nav-link" [routerLink]="['/registro']">Registrate</a>
+            <a class="nav-link" [routerLink]="['/registro']" *ngIf="!identity">Registrate</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" [routerLink]="['/login']">Login</a>
+            <a class="nav-link" [routerLink]="['/login']" *ngIf="!identity">Login</a>
           </li>
-          <li class="nav-item dropdown">
+          <li class="nav-item dropdown" *ngIf="identity">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              nombre apellido
+              {{identity.name + ' ' + identity.surname}}
             </a>
             <ul class="dropdown-menu p-2">
               <li><a class="dropdown-item" href="#"> Panel de usuario</a></li>
               <li><a class="dropdown-item" href="#">Mi perfil</a></li>
               <li><a class="dropdown-item" href="#">Ajustes</a></li>
               <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="#">Cerrar cession</a></li>
+              <li><a class="dropdown-item" (click)="logOut()">Cerrar cession</a></li>
             </ul>
           </li>
         </ul>
