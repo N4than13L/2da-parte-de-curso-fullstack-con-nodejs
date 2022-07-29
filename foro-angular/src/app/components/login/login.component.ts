@@ -26,7 +26,6 @@ export class LoginComponent implements OnInit {
    }
 
   ngOnInit(): void {
-
   }
 
   onSubmit(form:any){
@@ -34,7 +33,6 @@ export class LoginComponent implements OnInit {
     this._userService.signup(this.user).subscribe(
       response => {
         if (response.user && response.user._id){
-          
           // Guardamos el usuario en una propiedad.
           this.identity = response.user
           localStorage.setItem('identity', JSON.stringify(this.identity))
@@ -53,7 +51,7 @@ export class LoginComponent implements OnInit {
               }else{  
                 this.status = "error"
               }
-              form.reset()
+             
             },
             error => {
               this.status = "error"
@@ -63,6 +61,8 @@ export class LoginComponent implements OnInit {
         }else{  
           this.status = "error"
         }
+        
+        form.reset()
       },
       error => {
         this.status = "error"

@@ -9,9 +9,11 @@ export class UserService {
     public url: string
     public identity: any
     public token: any
+    public user: User
 
     constructor(private _http: HttpClient){
         this.url = global.url
+        this.user = new User("", "", "", "", "", "", "ROLE USER")
     }
 
     prueba(){
@@ -25,7 +27,6 @@ export class UserService {
         // Definir las cabeceras 
         let headers = new HttpHeaders().set("Content-Type", "application/json")
 
-
         // Hacer peticion ajax
         return this._http.post(this.url + "register", params, {headers: headers})
 
@@ -34,7 +35,7 @@ export class UserService {
     signup(user: any, gettoken: any = null): Observable<any>{
         // Comprobar si llega el gettoken
         if (gettoken != null){
-            user.getToken = gettoken
+            user.gettoken = gettoken
         }
 
         let params = JSON.stringify(user)
@@ -44,10 +45,11 @@ export class UserService {
     }
 
     getIdentity(){
-        let identity = JSON.stringify(localStorage.getItem('identity'))
+        let identity = JSON.parse(localStorage.getItem('identity')!)
         
         if (identity && identity != null && identity != undefined && identity != "undefined"){
             this.identity = identity
+          
         } else{
             this.identity = null
         }
