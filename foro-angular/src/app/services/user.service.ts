@@ -35,7 +35,7 @@ export class UserService {
     signup(user: any, gettoken: any = null): Observable<any>{
         // Comprobar si llega el gettoken
         if (gettoken != null){
-            user.gettoken = gettoken
+            user.getToken = gettoken
         }
 
         let params = JSON.stringify(user)

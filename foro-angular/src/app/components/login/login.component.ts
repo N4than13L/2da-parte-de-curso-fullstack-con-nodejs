@@ -18,7 +18,7 @@ export class LoginComponent implements OnInit {
   public token: any
 
   constructor(
-    private route: ActivatedRoute,
+    private _route: ActivatedRoute,
     private _router: Router,
     private _userService: UserService) {
     this.pageTitle = "Registrate aquí"
@@ -35,7 +35,9 @@ export class LoginComponent implements OnInit {
         if (response.user && response.user._id){
           // Guardamos el usuario en una propiedad.
           this.identity = response.user
+          this.status = "success"
           localStorage.setItem('identity', JSON.stringify(this.identity))
+          console.log(response)
 
           // Consgeuir el token de usuaio 
           this._userService.signup(this.user, true).subscribe(
@@ -43,6 +45,8 @@ export class LoginComponent implements OnInit {
               if (response.token){  
                 // Guardar el token del usuario en una propiedad
                 this.token = response.token
+                console.log(this.token)
+
                 localStorage.setItem('token', this.token)
 
                 this.status = "success"
@@ -60,6 +64,7 @@ export class LoginComponent implements OnInit {
 
         }else{  
           this.status = "error"
+          
         }
         
         form.reset()

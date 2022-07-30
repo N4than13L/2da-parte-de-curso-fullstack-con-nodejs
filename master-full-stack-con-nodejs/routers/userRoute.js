@@ -23,7 +23,7 @@ router.get('/users', userController.getUsers)
 router.get('/user/:userId', userController.getUser)
 
 // conf el modulo multiparty
-router.post('/avatar/:id', [md_auth.authenticated, md_updload], userController.upload_avatar)
+router.post('/avatar', [md_auth.authenticated, md_updload], userController.upload_avatar)
 
 
 module.exports = router
