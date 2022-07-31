@@ -45,7 +45,17 @@ export class UserEditComponent implements OnInit {
       theme: "attachPin",
       hideProgressBar: false,
       hideResetBtn: true,
-      attachPinText: "sube tu foto"
+      replaceTexts: {
+        selectFileBtn: 'Select Files',
+        resetBtn: 'Reset',
+        uploadBtn: 'Upload',
+        dragNDropBox: 'Drag N Drop',
+        attachPinBtn: 'Sube tu foto aquí',
+        afterUploadMsg_success: 'Successfully Uploaded !',
+        afterUploadMsg_error: 'Upload Failed !',
+        sizeLimit: 'Size Limit'
+      }
+  
     }
   }
 
@@ -54,13 +64,28 @@ export class UserEditComponent implements OnInit {
   }
 
   onSubmit(form: any){
+    this._userService.update(this.user).subscribe(
+      response => {
+        if (!response.user){
+          this.status = "error"
+        }else{
+          this.status = "success"
+          localStorage.setItem('identity', JSON.stringify(this.user))
 
+        }
+      }, 
+      error =>{
+        this.status = "error"
+        console.log(error)
+      }
+    )
   }
 
   avatarUpload(data: any){
-    let data_obj = JSON.parse(data.response.user)
-    this.user.image = data_obj.body.image
+    let file = data.body.user.image
+    this.user.image = file
     console.log(this.user)
+  
   }
 
 }
