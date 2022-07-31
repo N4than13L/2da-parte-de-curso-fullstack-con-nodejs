@@ -1,0 +1,51 @@
+<div class="col-lg-10">
+    <h3>{{pageTitle}}</h3>
+    <hr/>
+
+    <form #addTopic="ngForm" (ngSubmit)="onSubmit(addTopic)">
+        <div class="form-grup" >
+            <label for="title">titulo:</label>
+            <input type="text" name="title" #title="ngModel" [(ngModel)]="topic.title"
+            required class="form-control"/>
+            
+            <small *ngIf="!title.valid && title.touched" class="invalid-feedback d-block">
+                El titulo no es valido
+            </small>
+        </div>
+
+
+        <div class="form-grup" >
+            <label for="content">coloca tu pregunta o contenido:</label>
+            <input type="text" name="content" #content="ngModel" [(ngModel)]="topic.content"
+            required class="form-control"/>
+            
+            <small *ngIf="!content.valid && content.touched" class="invalid-feedback d-block">
+                El Contenido no es valido
+            </small>
+        </div>
+
+       
+        <div class="form-grup" >
+            <label for="code">Codigo:</label>
+            <textarea name="code" #code="ngModel" [(ngModel)]="topic.code"
+            required class="form-control"></textarea>
+            
+            <small *ngIf="!code.valid && code.touched" class="invalid-feedback d-block">
+                El Codigo no es valido
+            </small>
+        </div>
+
+        <div class="form-grup">
+            <label for="lang">de que lenguaje hablas?</label>
+            <input type="text" name="lang" #lang="ngModel" [(ngModel)]="topic.lang"
+            required class="form-control"/>
+            
+            <small *ngIf="!lang.valid && lang.touched" class="invalid-feedback d-block">
+                El Contenido no es valido
+            </small>
+        </div>
+
+        <input type="submit" value="{{pageTitle}}" class="btn btn-success mt-3" [disabled]="addTopic.invalid"/>
+
+    </form>
+</div>
